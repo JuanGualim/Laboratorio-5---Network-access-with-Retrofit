@@ -7,10 +7,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.laboratorio5.ui.detail.PokemonDetailScreen
+import com.example.laboratorio5.ui.list.PokemonListScreen
 import com.example.laboratorio5.ui.theme.Laboratorio5Theme
 
 class MainActivity : ComponentActivity() {
@@ -19,11 +27,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Laboratorio5Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Surface {
+                    PokemonApp()
                 }
             }
         }
@@ -31,17 +36,31 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun PokemonApp() {
+    val navController = rememberNavController()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Laboratorio5Theme {
-        Greeting("Android")
+    NavHost(
+        navController = navController,
+        startDestination = "list"
+    ) {
+        // Pantalla de la lista
+        composable("list") {
+            PokemonListScreen { id, name ->
+                navController.navigate("detail/$id/$name")
+            }
+        }
+
+        // Pantalla de detalle
+        composable(
+            route = "detail/{id}/{name}",
+            arguments = listOf(
+                navArgument("id") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: ""
+            PokemonDetailScreen(id = id, name = name)
+        }
     }
 }
