@@ -43,14 +43,13 @@ fun PokemonApp() {
         navController = navController,
         startDestination = "list"
     ) {
-        // Pantalla de la lista
+
         composable("list") {
             PokemonListScreen { id, name ->
                 navController.navigate("detail/$id/$name")
             }
         }
 
-        // Pantalla de detalle
         composable(
             route = "detail/{id}/{name}",
             arguments = listOf(
@@ -60,7 +59,11 @@ fun PokemonApp() {
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id") ?: ""
             val name = backStackEntry.arguments?.getString("name") ?: ""
-            PokemonDetailScreen(id = id, name = name)
+            PokemonDetailScreen(
+                id = id,
+                name = name,
+                onBackClick = { navController.navigateUp()}
+            )
         }
     }
 }

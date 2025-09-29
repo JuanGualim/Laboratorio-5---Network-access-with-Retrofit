@@ -1,6 +1,7 @@
 package com.example.laboratorio5.ui.list
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,9 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.laboratorio5.network.Pokemon
@@ -53,19 +57,34 @@ fun PokemonListScreen(
             }
         }
         else -> {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(pokemonList) { pokemon ->
-                    // Sacamos el ID desde la url que ya viene en el modelo
-                    val id = pokemon.url.trimEnd('/').substringAfterLast('/')
-                    PokemonItem(
-                        name = pokemon.name,
-                        id = id,
-                        onClick = { onPokemonClick(id, pokemon.name) }
-                    )
+            Column {
+                Text(
+                    text = "Lista de Pokémon",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = Color(0xFF000000),
+                    fontSize = 30.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color(0xFF2196F3))
+                        .padding(horizontal = 16.dp, vertical = 15.dp)
+                )
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+
+
+                    items(pokemonList) { pokemon ->
+                        // Sacamos el ID desde la url que ya viene en el modelo
+                        val id = pokemon.url.trimEnd('/').substringAfterLast('/')
+                        PokemonItem(
+                            name = pokemon.name,
+                            id = id,
+                            onClick = { onPokemonClick(id, pokemon.name) }
+                        )
+                    }
                 }
             }
         }
