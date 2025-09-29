@@ -37,13 +37,13 @@ fun PokemonDetailScreen(
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",
-                    tint = Color(0xFF000000)
+                    tint = Color(0xFFFFFFFF)
                 )
             }
             Text(
                 text = "Lista de Pokémon",
                 style = MaterialTheme.typography.headlineLarge,
-                color = Color(0xFF000000),
+                color = Color(0xFFFFFFFF),
                 fontSize = 30.sp,
                 modifier = Modifier
                     .fillMaxWidth()

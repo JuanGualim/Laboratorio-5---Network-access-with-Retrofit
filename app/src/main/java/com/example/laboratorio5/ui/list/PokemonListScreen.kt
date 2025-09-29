@@ -15,13 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
-import com.example.laboratorio5.network.Pokemon
 import com.example.laboratorio5.network.RetrofitClient
 import com.example.laboratorio5.network.PokeResult
 
@@ -61,7 +58,7 @@ fun PokemonListScreen(
                 Text(
                     text = "Lista de Pokémon",
                     style = MaterialTheme.typography.headlineLarge,
-                    color = Color(0xFF000000),
+                    color = Color(0xFFFFFFFF),
                     fontSize = 30.sp,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -77,7 +74,6 @@ fun PokemonListScreen(
 
 
                     items(pokemonList) { pokemon ->
-                        // Sacamos el ID desde la url que ya viene en el modelo
                         val id = pokemon.url.trimEnd('/').substringAfterLast('/')
                         PokemonItem(
                             name = pokemon.name,

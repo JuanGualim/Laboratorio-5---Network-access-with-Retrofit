@@ -1,7 +1,7 @@
 package com.example.laboratorio5.network
 
 data class PokeResponse(val results: List<PokeResult>) {
-    // Firebase requires an empty constructor to deserialize objects
+
     @Suppress("unused")
     constructor() : this(emptyList())
 }
@@ -14,7 +14,7 @@ data class PokeResult(
     constructor() : this("", "")
 }
 
-// Modelo para el Pokémon (simplificado)
+
 data class Pokemon(
     val name: String,
     val id: String
