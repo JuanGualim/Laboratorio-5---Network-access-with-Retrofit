@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -38,11 +37,12 @@ fun PokemonApp() {
         navController = navController,
         startDestination = "list"
     ) {
-
         composable("list") {
-            PokemonListScreen { id, name ->
-                navController.navigate("detail/$id/$name")
-            }
+            PokemonListScreen(
+                onPokemonClick = { id, name ->
+                    navController.navigate("detail/$id/$name")
+                }
+            )
         }
 
         composable(
@@ -57,7 +57,7 @@ fun PokemonApp() {
             PokemonDetailScreen(
                 id = id,
                 name = name,
-                onBackClick = { navController.navigateUp()}
+                onBackClick = { navController.navigateUp() }
             )
         }
     }
