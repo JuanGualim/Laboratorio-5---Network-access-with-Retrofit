@@ -5,27 +5,31 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun PokemonDetailScreen(
     id: String,
     name: String,
-    onBackClick: () -> Unit = { }
+    onBackClick: () -> Unit = { },
+    viewModel: PokemonDetailViewModel = viewModel()
 ) {
+    LaunchedEffect(id, name) {
+        viewModel.setPokemon(id, name)
+    }
+
+    val uiState by viewModel.uiState.collectAsState()
+    val pokemon = uiState.pokemon
+
     Column {
         Row(
             modifier = Modifier
@@ -41,7 +45,7 @@ fun PokemonDetailScreen(
                 )
             }
             Text(
-                text = "Lista de Pokémon",
+                text = "Detalle de Pokémon",
                 style = MaterialTheme.typography.headlineLarge,
                 color = Color(0xFFFFFFFF),
                 fontSize = 30.sp,
@@ -51,43 +55,44 @@ fun PokemonDetailScreen(
                     .padding(horizontal = 16.dp, vertical = 15.dp)
             )
         }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
 
-            Text(
-                text = name.replaceFirstChar { it.uppercase() },
-                style = MaterialTheme.typography.headlineMedium
-            )
-
-            // Cuadro con 4 imágenes
-            Card(
+        if (pokemon != null) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Text(
+                    text = pokemon.name.replaceFirstChar { it.uppercase() },
+                    style = MaterialTheme.typography.headlineMedium
+                )
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        PokemonImage("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png")
-                        PokemonImage("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/$id.png")
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        PokemonImage("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/$id.png")
-                        PokemonImage("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/$id.png")
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            PokemonImage(pokemon.imageUrlFront, "Frente")
+                            PokemonImage(pokemon.imageUrlBack, "Espalda")
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            PokemonImage(pokemon.imageUrlShinyFront, "Frente Shiny")
+                            PokemonImage(pokemon.imageUrlShinyBack, "Espalda Shiny")
+                        }
                     }
                 }
             }
@@ -96,21 +101,11 @@ fun PokemonDetailScreen(
 }
 
 @Composable
-fun PokemonImage(url: String) {
+fun PokemonImage(url: String, contentDescription: String) {
     Image(
         painter = rememberAsyncImagePainter(url),
-        contentDescription = null,
+        contentDescription = contentDescription,
         modifier = Modifier.size(120.dp),
         contentScale = ContentScale.Crop
     )
 }
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewPokemonDetailScreen() {
-    PokemonDetailScreen(
-        id = "1",
-        name = "Bulbasaur"
-    )
-}
-
