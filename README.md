@@ -40,6 +40,17 @@ El propósito del laboratorio es aplicar conceptos de **acceso a red con Retrofi
 
 ---
 
+## 📸 Capturas de funcionamiento
+
+A continuación se muestran imágenes del funcionamiento de la aplicación:
+
+| Pantalla principal | Detalle del Pokémon |
+|--------------------|---------------------|
+| ![Lista de Pokémon](app/screenshots/list_screen.png) | ![Detalle de Pokémon](app/screenshots/detail_screen.png) |
+
+> 📷 Las capturas se encuentran dentro de la carpeta `screenshots/`.
+
+
 ## 🚀 Ejecución del proyecto
 
 1. Clona el repositorio:
